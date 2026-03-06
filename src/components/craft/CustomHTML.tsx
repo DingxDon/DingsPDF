@@ -16,13 +16,26 @@ export const CustomHTML = ({ htmlCode }: any) => {
     const previewMode = useEditorStore(state => state.previewMode);
     const activeResponseData = useEditorStore(state => state.activeResponseData);
     const openModal = useEditorStore(state => state.openModal);
+    const customVariables = useEditorStore(state => state.customVariables);
 
     // Interpolate variables if in preview mode
     let renderedHtml = htmlCode;
-    if (previewMode && activeResponseData) {
+    if (previewMode) {
         try {
+            // Merge custom variables with active response data
+            // Custom variables can act as overrides or standalones
+            const customVarsObj = customVariables.reduce((acc: any, curr) => {
+                acc[curr.name] = curr.value;
+                return acc;
+            }, {});
+
+            const context = {
+                ...(activeResponseData || {}),
+                ...customVarsObj
+            };
+
             const template = Handlebars.compile(htmlCode);
-            renderedHtml = template(activeResponseData);
+            renderedHtml = template(context);
         } catch (e) {
             console.error("Handlebars interpolation failed:", e);
         }
