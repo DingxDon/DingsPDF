@@ -15,7 +15,6 @@ export const EditorWorkspace = () => {
 
     return (
         <div className="flex flex-col h-full w-full bg-zinc-50 dark:bg-zinc-950 transition-colors duration-300">
-            <Topbar />
             <div className="flex flex-1 overflow-hidden relative w-full h-full">
                 <LeftSidebar />
 
@@ -26,7 +25,7 @@ export const EditorWorkspace = () => {
                             : "linear-gradient(to right, #e4e4e7 1px, transparent 1px), linear-gradient(to bottom, #e4e4e7 1px, transparent 1px)",
                         backgroundSize: "24px 24px"
                     }}>
-                    <div className="py-16 w-full flex flex-col items-center transform scale-[0.55] sm:scale-75 md:scale-90 min-[1200px]:scale-100 origin-top transition-transform duration-300">
+                    <div id="pdf-workspace-wrapper" className="pt-16 pb-32 w-full flex flex-col items-center transform scale-[0.55] sm:scale-75 md:scale-90 min-[1200px]:scale-100 origin-top transition-transform duration-300">
                         <Frame>
                             <Element is={CanvasArea} id="root_canvas" canvas>
                                 <Element is={A4Page} preset="A4" customWidth={794} customHeight={1123} canvas>
@@ -37,6 +36,9 @@ export const EditorWorkspace = () => {
                     </div>
                 </main>
             </div>
+
+            {/* Floating Topbar */}
+            <Topbar />
 
             {/* Global Overlays */}
             <ComponentEditorModal />

@@ -162,7 +162,7 @@ export const DataSourceModal = () => {
 
     return (
         <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-[100] flex items-center justify-center backdrop-blur-sm transition-all duration-300">
-            <div className="bg-white dark:bg-zinc-950 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex overflow-hidden border border-zinc-200 dark:border-zinc-800 transition-colors">
+            <div className="bg-white dark:bg-zinc-950 rounded-2xl shadow-xl w-full max-w-4xl flex overflow-hidden border border-zinc-200 dark:border-zinc-800 transition-colors h-full max-h-[60dvh]">
 
                 {/* Internal Sidebar for Data Sources */}
                 <div className="w-1/3 bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 flex flex-col h-full transition-colors">

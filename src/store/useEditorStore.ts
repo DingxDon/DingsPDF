@@ -24,12 +24,19 @@ export interface DataSource {
   body: string;
 }
 
+export interface CustomVariable {
+  id: string;
+  name: string;
+  value: string;
+}
+
 export interface EditorState {
   previewMode: boolean;
   dataSources: DataSource[];
   activeDataSourceId: string | null;
   activeResponseData: any | null;
   variables: string[]; // flattened dotted paths
+  customVariables: CustomVariable[];
   savedComponents: SavedComponent[];
   modalState: ModalState;
   isDarkMode: boolean;
@@ -50,6 +57,10 @@ export interface EditorState {
   setVariables: (vars: string[]) => void;
   toggleDarkMode: () => void;
   setMobileDrawerOpen: (open: boolean) => void;
+
+  addCustomVariable: (variable: CustomVariable) => void;
+  updateCustomVariable: (id: string, name: string, value: string) => void;
+  deleteCustomVariable: (id: string) => void;
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
@@ -58,6 +69,7 @@ export const useEditorStore = create<EditorState>((set) => ({
   activeDataSourceId: null,
   activeResponseData: null,
   variables: [],
+  customVariables: [],
   savedComponents: [],
   modalState: {
     isOpen: false,
@@ -110,5 +122,13 @@ export const useEditorStore = create<EditorState>((set) => ({
     }
     return { isDarkMode: isDark };
   }),
-  setMobileDrawerOpen: (open) => set({ isMobileDrawerOpen: open })
+  setMobileDrawerOpen: (open) => set({ isMobileDrawerOpen: open }),
+
+  addCustomVariable: (variable) => set((state) => ({ customVariables: [...state.customVariables, variable] })),
+  updateCustomVariable: (id, name, value) => set((state) => ({
+    customVariables: state.customVariables.map(v => v.id === id ? { ...v, name, value } : v)
+  })),
+  deleteCustomVariable: (id) => set((state) => ({
+    customVariables: state.customVariables.filter(v => v.id !== id)
+  }))
 }));
