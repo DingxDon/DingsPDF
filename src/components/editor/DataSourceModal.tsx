@@ -161,20 +161,20 @@ export const DataSourceModal = () => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center backdrop-blur-sm transition-all duration-300">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex overflow-hidden border border-[#E6E8EC]">
+        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-[100] flex items-center justify-center backdrop-blur-sm transition-all duration-300">
+            <div className="bg-white dark:bg-zinc-950 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] flex overflow-hidden border border-zinc-200 dark:border-zinc-800 transition-colors">
 
                 {/* Internal Sidebar for Data Sources */}
-                <div className="w-1/3 bg-[#FBFBFD] border-r border-[#E6E8EC] flex flex-col h-full">
-                    <div className="p-4 border-b border-[#E6E8EC] flex justify-between items-center shadow-sm z-10">
-                        <span className="font-semibold text-[#111827] flex items-center gap-2"><Database size={16} /> API Sources</span>
-                        <button onClick={handleNew} className="p-1 hover:bg-[#E6E8EC] rounded text-[#6B7280] transition-colors" title="New API">
+                <div className="w-1/3 bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 flex flex-col h-full transition-colors">
+                    <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex justify-between items-center shadow-sm z-10">
+                        <span className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-2"><Database size={16} /> API Sources</span>
+                        <button onClick={handleNew} className="p-1 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded text-zinc-500 dark:text-zinc-400 transition-colors" title="New API">
                             <Plus size={16} />
                         </button>
                     </div>
                     <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2 custom-scrollbar">
                         {dataSources.length === 0 ? (
-                            <div className="text-center text-[12px] text-[#A0A0A0] py-10 px-4">
+                            <div className="text-center text-[12px] text-zinc-400 dark:text-zinc-500 py-10 px-4">
                                 No APIs configured. Click + to add.
                             </div>
                         ) : (
@@ -182,15 +182,15 @@ export const DataSourceModal = () => {
                                 <div
                                     key={ds.id}
                                     onClick={() => loadDataSource(ds)}
-                                    className={`p-3 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${formId === ds.id ? 'bg-white border-[#4F46E5] ring-1 ring-[#4F46E5] shadow-sm' : 'bg-transparent border-[#E6E8EC] hover:bg-white hover:border-[#D1D5DB]'}`}
+                                    className={`p-3 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${formId === ds.id ? 'bg-white dark:bg-zinc-800 border-indigo-500 ring-1 ring-indigo-500 shadow-sm' : 'bg-transparent border-zinc-200 dark:border-zinc-800 hover:bg-white dark:hover:bg-zinc-800/50 hover:border-zinc-300 dark:hover:border-zinc-700'}`}
                                 >
                                     <div className="flex flex-col gap-1 overflow-hidden">
-                                        <span className="text-[13px] font-medium text-[#111827] truncate">{ds.name}</span>
-                                        <span className="text-[11px] text-[#6B7280] truncate font-mono">{ds.method} {ds.url}</span>
+                                        <span className="text-[13px] font-medium text-zinc-900 dark:text-zinc-100 truncate">{ds.name}</span>
+                                        <span className="text-[11px] text-zinc-500 dark:text-zinc-400 truncate font-mono">{ds.method} {ds.url}</span>
                                     </div>
                                     <button
                                         onClick={(e) => { e.stopPropagation(); handleDelete(ds.id); }}
-                                        className="p-1.5 text-[#A0A0A0] hover:text-[#EF4444] hover:bg-[#FEE2E2] rounded transition-colors opacity-0 group-hover:opacity-100 placeholder-shown:opacity-100" // basic tailwind tricks
+                                        className="p-1.5 text-zinc-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded transition-colors opacity-0 group-hover:opacity-100 placeholder-shown:opacity-100" // basic tailwind tricks
                                         style={{ opacity: 1 }}
                                     >
                                         <Trash2 size={14} />
@@ -202,90 +202,90 @@ export const DataSourceModal = () => {
                 </div>
 
                 {/* Edit Area */}
-                <div className="w-2/3 flex flex-col h-full bg-white relative">
-                    <div className="p-4 border-b border-[#E6E8EC] flex justify-between items-center bg-white shadow-sm z-10">
-                        <span className="font-semibold text-[#111827]">{formId ? 'Edit Configuration' : 'New Configuration'}</span>
-                        <button onClick={closeModal} className="p-1.5 hover:bg-[#F7F8FA] rounded text-[#6B7280] transition-colors">
+                <div className="w-2/3 flex flex-col h-full bg-white dark:bg-zinc-950 relative transition-colors">
+                    <div className="p-4 border-b border-zinc-200 dark:border-zinc-800 flex justify-between items-center bg-white dark:bg-zinc-950 shadow-sm z-10 transition-colors">
+                        <span className="font-semibold text-zinc-900 dark:text-zinc-100">{formId ? 'Edit Configuration' : 'New Configuration'}</span>
+                        <button onClick={closeModal} className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded text-zinc-500 dark:text-zinc-400 transition-colors">
                             <X size={16} />
                         </button>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-5 custom-scrollbar bg-white">
+                    <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-5 custom-scrollbar bg-white dark:bg-zinc-950 transition-colors">
 
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-[12px] font-semibold text-[#6B7280] uppercase tracking-wide">API Name</label>
+                            <label className="text-[12px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">API Name</label>
                             <input
                                 value={name}
                                 onChange={e => setName(e.target.value)}
                                 placeholder="e.g., Generate Student API"
-                                className="w-full border border-[#E6E8EC] rounded-lg px-3 py-2 text-[14px] text-[#111827] outline-none focus:border-[#4F46E5] focus:ring-1 focus:ring-[#4F46E5] transition-all bg-[#FBFBFD] focus:bg-white"
+                                className="w-full border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-[14px] text-zinc-900 dark:text-zinc-100 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all bg-zinc-50 dark:bg-zinc-900 focus:bg-white dark:focus:bg-zinc-950"
                             />
                         </div>
 
                         <div className="flex items-start gap-4">
                             <div className="flex flex-col gap-1.5 w-1/4">
-                                <label className="text-[12px] font-semibold text-[#6B7280] uppercase tracking-wide">Method</label>
+                                <label className="text-[12px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">Method</label>
                                 <select
                                     value={method}
                                     onChange={e => setMethod(e.target.value as any)}
-                                    className="w-full border border-[#E6E8EC] rounded-lg px-3 py-2 text-[14px] text-[#111827] outline-none focus:border-[#4F46E5] focus:ring-1 focus:ring-[#4F46E5] transition-all bg-[#FBFBFD] focus:bg-white"
+                                    className="w-full border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-[14px] text-zinc-900 dark:text-zinc-100 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all bg-zinc-50 dark:bg-zinc-900 focus:bg-white dark:focus:bg-zinc-950"
                                 >
                                     <option value="GET">GET</option>
                                     <option value="POST">POST</option>
                                 </select>
                             </div>
                             <div className="flex flex-col gap-1.5 flex-1 w-full">
-                                <label className="text-[12px] font-semibold text-[#6B7280] uppercase tracking-wide">API Endpoint</label>
+                                <label className="text-[12px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">API Endpoint</label>
                                 <input
                                     value={url}
                                     onChange={e => setUrl(e.target.value)}
                                     placeholder="https://api.example.com/data"
-                                    className="w-full border border-[#E6E8EC] rounded-lg px-3 py-2 text-[14px] text-[#111827] outline-none focus:border-[#4F46E5] focus:ring-1 focus:ring-[#4F46E5] transition-all bg-[#FBFBFD] focus:bg-white font-mono"
+                                    className="w-full border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-[14px] text-zinc-900 dark:text-zinc-100 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all bg-zinc-50 dark:bg-zinc-900 focus:bg-white dark:focus:bg-zinc-950 font-mono"
                                 />
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-[12px] font-semibold text-[#6B7280] uppercase tracking-wide flex justify-between">
+                            <label className="text-[12px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide flex justify-between">
                                 <span>Headers (JSON Object format)</span>
-                                <span className="font-normal text-[#A0A0A0]">Optional</span>
+                                <span className="font-normal text-zinc-400 dark:text-zinc-500">Optional</span>
                             </label>
                             <textarea
                                 value={headers}
                                 onChange={e => setHeaders(e.target.value)}
                                 placeholder='{\n  "Authorization": "Bearer TOKEN"\n}'
-                                className="w-full h-24 border border-[#E6E8EC] rounded-lg px-3 py-2 text-[13px] text-[#111827] font-mono outline-none focus:border-[#4F46E5] focus:ring-1 focus:ring-[#4F46E5] transition-all bg-[#FBFBFD] focus:bg-white resize-y"
+                                className="w-full h-24 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-[13px] text-zinc-900 dark:text-zinc-100 font-mono outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all bg-zinc-50 dark:bg-zinc-900 focus:bg-white dark:focus:bg-zinc-950 resize-y"
                             />
                         </div>
 
                         {method === "POST" && (
                             <div className="flex flex-col gap-1.5">
-                                <label className="text-[12px] font-semibold text-[#6B7280] uppercase tracking-wide flex justify-between">
+                                <label className="text-[12px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide flex justify-between">
                                     <span>Request Body (JSON Object format)</span>
-                                    <span className="font-normal text-[#A0A0A0]">Optional</span>
+                                    <span className="font-normal text-zinc-400 dark:text-zinc-500">Optional</span>
                                 </label>
                                 <textarea
                                     value={body}
                                     onChange={e => setBody(e.target.value)}
                                     placeholder='{\n  "query": "all"\n}'
-                                    className="w-full h-32 border border-[#E6E8EC] rounded-lg px-3 py-2 text-[13px] text-[#111827] font-mono outline-none focus:border-[#4F46E5] focus:ring-1 focus:ring-[#4F46E5] transition-all bg-[#FBFBFD] focus:bg-white resize-y"
+                                    className="w-full h-32 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 py-2 text-[13px] text-zinc-900 dark:text-zinc-100 font-mono outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all bg-zinc-50 dark:bg-zinc-900 focus:bg-white dark:focus:bg-zinc-950 resize-y"
                                 />
                             </div>
                         )}
 
                         {fetchStatus && (
-                            <div className={`p-3 rounded-lg border text-[13px] font-medium flex items-center gap-2 ${fetchStatus.type === 'error' ? 'bg-[#FEE2E2] border-[#FDBA74] text-[#991B1B]' : 'bg-[#D1FAE5] border-[#6EE7B7] text-[#065F46]'}`}>
+                            <div className={`p-3 rounded-lg border text-[13px] font-medium flex items-center gap-2 ${fetchStatus.type === 'error' ? 'bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/20 text-rose-700 dark:text-rose-400' : 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-400'}`}>
                                 {fetchStatus.message}
                             </div>
                         )}
 
                     </div>
 
-                    <div className="p-4 border-t border-[#E6E8EC] bg-[#FBFBFD] flex justify-between items-center shadow-inner z-10 shrink-0">
+                    <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 flex justify-between items-center shadow-inner z-10 shrink-0 transition-colors">
                         <button
                             onClick={handleFetch}
                             disabled={isLoading}
-                            className={`px-4 py-2 rounded-lg flex items-center gap-2 text-[13px] font-medium transition-all shadow-sm ${isLoading ? 'bg-[#D1D5DB] text-[#6B7280] cursor-not-allowed' : 'bg-[#E5E7EB] hover:bg-[#D1D5DB] text-[#111827] border border-[#D1D5DB]'}`}
+                            className={`px-4 py-2 rounded-lg flex items-center gap-2 text-[13px] font-medium transition-all shadow-sm ${isLoading ? 'bg-zinc-300 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400 cursor-not-allowed' : 'bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-700'}`}
                         >
                             <UploadCloud size={16} />
                             {isLoading ? 'Fetching...' : 'Fetch Test & Extract Variables'}
@@ -293,13 +293,13 @@ export const DataSourceModal = () => {
                         <div className="flex gap-3">
                             <button
                                 onClick={closeModal}
-                                className="px-4 py-2 text-[#6B7280] hover:text-[#111827] text-[13px] font-medium transition-colors"
+                                className="px-4 py-2 text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 text-[13px] font-medium transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSave}
-                                className="bg-[#4F46E5] hover:bg-[#6366F1] text-white px-5 py-2 rounded-lg flex items-center gap-2 transition-colors text-[13px] font-medium shadow-sm"
+                                className="bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white px-5 py-2 rounded-lg flex items-center gap-2 transition-colors text-[13px] font-medium shadow-sm"
                             >
                                 <Save size={16} /> Save Config
                             </button>

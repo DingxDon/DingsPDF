@@ -1,18 +1,19 @@
 @import "tailwindcss";
 
-@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --color-figma-bg: #E5E5E5;
   --color-figma-panel: #FFFFFF;
   --color-figma-text: #333333;
   --color-figma-border: #E5E5E5;
-  --color-figma-blue: #18A0FB;
-  --color-figma-blue-hover: #0D8DE6;
   --font-sans: var(--font-inter);
 }
 
-body {
-  font-family: var(--font-sans), sans-serif;
-  overflow: hidden;
+@layer base {
+  body {
+    font-family: var(--font-sans), sans-serif;
+    overflow: hidden;
+    @apply antialiased bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 selection:bg-indigo-500/30;
+  }
 }

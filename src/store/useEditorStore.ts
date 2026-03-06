@@ -32,6 +32,8 @@ export interface EditorState {
   variables: string[]; // flattened dotted paths
   savedComponents: SavedComponent[];
   modalState: ModalState;
+  isDarkMode: boolean;
+  isMobileDrawerOpen: boolean;
 
   setPreviewMode: (mode: boolean) => void;
   addSavedComponent: (component: SavedComponent) => void;
@@ -46,6 +48,8 @@ export interface EditorState {
   setActiveDataSourceId: (id: string | null) => void;
   setActiveResponseData: (data: any | null) => void;
   setVariables: (vars: string[]) => void;
+  toggleDarkMode: () => void;
+  setMobileDrawerOpen: (open: boolean) => void;
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
@@ -62,6 +66,8 @@ export const useEditorStore = create<EditorState>((set) => ({
     initialCode: '',
     targetId: null,
   },
+  isDarkMode: false,
+  isMobileDrawerOpen: false,
 
   setPreviewMode: (mode) => set({ previewMode: mode }),
 
@@ -92,5 +98,17 @@ export const useEditorStore = create<EditorState>((set) => ({
   })),
   setActiveDataSourceId: (id) => set({ activeDataSourceId: id }),
   setActiveResponseData: (data) => set({ activeResponseData: data }),
-  setVariables: (vars) => set({ variables: vars })
+  setVariables: (vars) => set({ variables: vars }),
+  toggleDarkMode: () => set((state) => {
+    const isDark = !state.isDarkMode;
+    if (typeof window !== 'undefined') {
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+    return { isDarkMode: isDark };
+  }),
+  setMobileDrawerOpen: (open) => set({ isMobileDrawerOpen: open })
 }));
