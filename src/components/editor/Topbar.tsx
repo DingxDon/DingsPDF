@@ -169,7 +169,7 @@ export const Topbar = () => {
                     <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md shadow-indigo-500/20 shrink-0">
                         <FileText size={16} className="text-white" />
                     </div>
-                    <span className="font-bold text-zinc-900 dark:text-zinc-50 text-[15px] tracking-tight hidden lg:block transition-colors">NexusPDF</span>
+                    <span className="font-bold text-zinc-900 dark:text-zinc-50 text-[15px] tracking-tight hidden lg:block transition-colors">Ding's PDF</span>
                 </div>
 
                 {/* File Ops */}
