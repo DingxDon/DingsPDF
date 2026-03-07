@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useEditor } from "@craftjs/core";
 import { useEditorStore } from "@/store/useEditorStore";
-import { Component, Variable, Plus, GripVertical, Copy, Code2, X, Trash2 } from "lucide-react";
+import { Component, Variable, Plus, GripVertical, Copy, Code2, X, Trash2, List, Type, Check } from "lucide-react";
 import { CustomHTML } from "../craft/CustomHTML";
 
 export const LeftSidebar = () => {
@@ -21,6 +21,12 @@ export const LeftSidebar = () => {
     const { connectors: { create } } = useEditor();
     const [activeTab, setActiveTab] = useState<"components" | "variables">("components");
     const [copiedVar, setCopiedVar] = useState<string | null>(null);
+
+    const [showAddVarForm, setShowAddVarForm] = useState(false);
+    const [newVarType, setNewVarType] = useState<"string" | "array">("string");
+    const [newVarName, setNewVarName] = useState("");
+    const [newVarStringValue, setNewVarStringValue] = useState("");
+    const [newVarArrayValues, setNewVarArrayValues] = useState<string[]>([""]);
 
     if (previewMode) {
         return null;
@@ -47,7 +53,7 @@ export const LeftSidebar = () => {
                 fixed inset-x-0 bottom-0 z-50 bg-zinc-50 dark:bg-zinc-950 flex flex-col transition-transform duration-300 transform 
                 rounded-t-3xl shadow-[0_-8px_30px_rgb(0,0,0,0.12)] border-t border-zinc-200 dark:border-zinc-800
                 h-[75vh] sm:h-[60vh] md:h-full md:relative md:inset-auto md:rounded-none md:shadow-none md:border-t-0 md:border-r 
-                md:w-[200px] min-[1200px]:w-[260px] shrink-0
+                md:w-[200px] min-[1200px]:w-[360px] shrink-0
                 ${isMobileDrawerOpen ? "translate-y-0" : "translate-y-full md:translate-y-0"}
             `}>
 
@@ -119,39 +125,116 @@ export const LeftSidebar = () => {
                         <div className="flex flex-col gap-6 pb-6 h-full overflow-hidden">
                             {/* Custom Variables Section */}
                             <div className="flex flex-col gap-3 shrink-0">
-                                <h4 className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Custom Variables</h4>
-                                <div className="flex flex-col gap-2 p-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-sm">
-                                    <input
-                                        type="text"
-                                        placeholder="Variable Name"
-                                        className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-[13px] outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-mono"
-                                        id="new-var-name"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="Value"
-                                        className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-[13px] outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-                                        id="new-var-value"
-                                    />
-                                    <button
-                                        onClick={() => {
-                                            const nameInput = document.getElementById('new-var-name') as HTMLInputElement;
-                                            const valueInput = document.getElementById('new-var-value') as HTMLInputElement;
-                                            if (nameInput.value.trim()) {
-                                                addCustomVariable({
-                                                    id: Math.random().toString(36).substr(2, 9),
-                                                    name: nameInput.value.trim(),
-                                                    value: valueInput.value
-                                                });
-                                                nameInput.value = '';
-                                                valueInput.value = '';
-                                            }
-                                        }}
-                                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-2 text-[13px] font-semibold flex items-center justify-center gap-2 transition-all"
-                                    >
-                                        <Plus size={14} /> Add Variable
-                                    </button>
+                                <div className="flex items-center justify-between">
+                                    <h4 className="text-[11px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">Custom Variables</h4>
+                                    {!showAddVarForm && (
+                                        <button onClick={() => setShowAddVarForm(true)} className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 transition-colors flex items-center gap-1">
+                                            <Plus size={12} /> New
+                                        </button>
+                                    )}
                                 </div>
+
+                                {showAddVarForm && (
+                                    <div className="flex flex-col gap-3 p-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg shadow-black/5 dark:shadow-white/5 animate-in slide-in-from-top-2">
+                                        <input
+                                            value={newVarName}
+                                            onChange={e => setNewVarName(e.target.value)}
+                                            type="text"
+                                            placeholder="Variable Name (e.g. users)"
+                                            className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-[13px] outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-mono placeholder:font-sans"
+                                        />
+
+                                        <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg">
+                                            <button
+                                                onClick={() => setNewVarType("string")}
+                                                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded-md transition-all ${newVarType === 'string' ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'}`}
+                                            >
+                                                <Type size={12} /> Text
+                                            </button>
+                                            <button
+                                                onClick={() => setNewVarType("array")}
+                                                className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-semibold rounded-md transition-all ${newVarType === 'array' ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm' : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'}`}
+                                            >
+                                                <List size={12} /> List
+                                            </button>
+                                        </div>
+
+                                        {newVarType === "string" ? (
+                                            <input
+                                                value={newVarStringValue}
+                                                onChange={e => setNewVarStringValue(e.target.value)}
+                                                type="text"
+                                                placeholder="Text Value"
+                                                className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-[13px] outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                                            />
+                                        ) : (
+                                            <div className="flex flex-col gap-2">
+                                                {newVarArrayValues.map((val, idx) => (
+                                                    <div key={idx} className="flex items-center gap-2 group/item">
+                                                        <div className="flex-1 min-w-0">
+                                                            <input
+                                                                value={val}
+                                                                onChange={e => {
+                                                                    const newVals = [...newVarArrayValues];
+                                                                    newVals[idx] = e.target.value;
+                                                                    setNewVarArrayValues(newVals);
+                                                                }}
+                                                                type="text"
+                                                                placeholder={`Item ${idx + 1}`}
+                                                                className="w-full bg-zinc-50 dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700 px-2 py-1.5 text-[13px] outline-none focus:border-indigo-500 transition-all"
+                                                            />
+                                                        </div>
+                                                        <button
+                                                            onClick={() => setNewVarArrayValues(newVarArrayValues.filter((_, i) => i !== idx))}
+                                                            className="p-1 text-zinc-300 dark:text-zinc-600 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover/item:opacity-100 transition-all shrink-0"
+                                                        >
+                                                            <Trash2 size={12} />
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                                <button
+                                                    onClick={() => setNewVarArrayValues([...newVarArrayValues, ""])}
+                                                    className="text-[11px] font-semibold text-zinc-500 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1 self-start ml-1 mt-1 transition-colors"
+                                                >
+                                                    <Plus size={10} /> Add Item
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        <div className="flex items-center gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800/50 mt-1">
+                                            <button
+                                                onClick={() => {
+                                                    setNewVarName("");
+                                                    setNewVarStringValue("");
+                                                    setNewVarArrayValues([""]);
+                                                    setShowAddVarForm(false);
+                                                }}
+                                                className="flex-1 bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded-lg py-1.5 text-[12px] font-semibold transition-all"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    if (!newVarName.trim()) return;
+                                                    addCustomVariable({
+                                                        id: Math.random().toString(36).substr(2, 9),
+                                                        name: newVarName.trim(),
+                                                        type: newVarType,
+                                                        value: newVarType === "string" ? newVarStringValue : newVarArrayValues.filter(v => v.trim() !== "")
+                                                    });
+                                                    setNewVarName("");
+                                                    setNewVarStringValue("");
+                                                    setNewVarArrayValues([""]);
+                                                    setShowAddVarForm(false);
+                                                }}
+                                                disabled={!newVarName.trim()}
+                                                className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg py-1.5 text-[12px] font-semibold flex items-center justify-center gap-1.5 transition-all"
+                                            >
+                                                <Check size={12} /> Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Existing Variables List */}
@@ -167,14 +250,17 @@ export const LeftSidebar = () => {
                                         <div key={v.id} className="group flex flex-col p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-indigo-500 dark:hover:border-indigo-500 transition-all">
                                             <div className="flex items-center justify-between mb-1.5">
                                                 <div
-                                                    className="flex items-center gap-2 cursor-pointer overflow-hidden"
+                                                    className="flex items-center gap-2 cursor-pointer overflow-hidden flex-1"
                                                     onClick={() => handleCopyVariable(v.name)}
                                                     title="Copy variable tag"
                                                 >
                                                     <Variable size={14} className="text-zinc-400 dark:text-zinc-500 shrink-0" />
                                                     <span className="text-[12px] font-mono text-indigo-600 dark:text-indigo-400 font-semibold truncate">{`{{${v.name}}}`}</span>
+                                                    {v.type === 'array' && (
+                                                        <span className="ml-1 text-[9px] bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded-md font-semibold shrink-0">List</span>
+                                                    )}
                                                 </div>
-                                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2 shrink-0">
                                                     <button
                                                         onClick={() => deleteCustomVariable(v.id)}
                                                         className="p-1 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 rounded transition-colors"
@@ -184,8 +270,20 @@ export const LeftSidebar = () => {
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div className="text-[11px] text-zinc-500 dark:text-zinc-400 truncate bg-zinc-50 dark:bg-zinc-800/50 rounded-md px-2 py-1 border border-zinc-100 dark:border-zinc-800">
-                                                Value: <span className="font-medium text-zinc-700 dark:text-zinc-300">{v.value || 'empty'}</span>
+                                            <div className="text-[11px] text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-zinc-800/50 rounded-md px-2 py-1.5 border border-zinc-100 dark:border-zinc-800">
+                                                {v.type === 'array' ? (
+                                                    <div className="flex flex-wrap gap-1">
+                                                        {(Array.isArray(v.value) ? v.value : []).length > 0 ? (
+                                                            (Array.isArray(v.value) ? v.value : []).map((item: string, i: number) => (
+                                                                <span key={i} className="bg-white dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 px-1.5 py-0.5 rounded text-[10px] break-all border border-zinc-200 dark:border-zinc-600">{item}</span>
+                                                            ))
+                                                        ) : (
+                                                            <span className="text-zinc-400 italic">empty array</span>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <span className="font-medium text-zinc-700 dark:text-zinc-300 break-all">{v.value ? String(v.value) : <span className="text-zinc-400 italic">empty state</span>}</span>
+                                                )}
                                             </div>
                                             {copiedVar === v.name && (
                                                 <div className="mt-1 text-[10px] font-bold text-emerald-500 text-right">Copied!</div>

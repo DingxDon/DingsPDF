@@ -27,7 +27,8 @@ export interface DataSource {
 export interface CustomVariable {
   id: string;
   name: string;
-  value: string;
+  type?: 'string' | 'array';
+  value: any;
 }
 
 export interface EditorState {
@@ -59,7 +60,7 @@ export interface EditorState {
   setMobileDrawerOpen: (open: boolean) => void;
 
   addCustomVariable: (variable: CustomVariable) => void;
-  updateCustomVariable: (id: string, name: string, value: string) => void;
+  updateCustomVariable: (id: string, name: string, type: 'string' | 'array', value: any) => void;
   deleteCustomVariable: (id: string) => void;
 }
 
@@ -125,8 +126,8 @@ export const useEditorStore = create<EditorState>((set) => ({
   setMobileDrawerOpen: (open) => set({ isMobileDrawerOpen: open }),
 
   addCustomVariable: (variable) => set((state) => ({ customVariables: [...state.customVariables, variable] })),
-  updateCustomVariable: (id, name, value) => set((state) => ({
-    customVariables: state.customVariables.map(v => v.id === id ? { ...v, name, value } : v)
+  updateCustomVariable: (id, name, type, value) => set((state) => ({
+    customVariables: state.customVariables.map(v => v.id === id ? { ...v, name, type, value } : v)
   })),
   deleteCustomVariable: (id) => set((state) => ({
     customVariables: state.customVariables.filter(v => v.id !== id)
